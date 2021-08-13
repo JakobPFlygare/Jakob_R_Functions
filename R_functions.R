@@ -42,4 +42,18 @@ colToNumeric <- function(df,cols) {
 }
 
 
+#Converting rows into columns. Similar to a group by with a (case when...) then
+
+myspread <- function(df, key, value) {
+  # quote key
+  keyq <- rlang::enquo(key)
+  # break value vector into quotes
+  valueq <- rlang::enquo(value)
+  s <- rlang::quos(!!valueq)
+  df %>% gather(variable, value, !!!s) %>%
+    unite(temp, !!keyq, variable) %>%
+    spread(temp, value)
+}
+
+
 
